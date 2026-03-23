@@ -10,7 +10,7 @@ them in a clean, modern interface.
 
 ## Live Demo
 
-👉 https://your-username.github.io/your-repo-name/
+[👉 https://your-username.github.io/your-repo-name/](https://tanyasingh0307.github.io/-news-dashboard/)
 
 ------------------------------------------------------------------------
 
