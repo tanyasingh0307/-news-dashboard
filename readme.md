@@ -1,6 +1,6 @@
-# 📰 News Dashboard Web App
+# News Dashboard Web App
 
-## 📌 Overview
+##  Overview
 
 This is a responsive web application that fetches and displays real-time
 news using a public API. Users can search for news articles and view
@@ -8,24 +8,24 @@ them in a clean, modern interface.
 
 ------------------------------------------------------------------------
 
-## 🚀 Live Demo
+## Live Demo
 
 👉 https://your-username.github.io/your-repo-name/
 
 ------------------------------------------------------------------------
 
-## ✨ Features
+## Features
 
--   🔍 Search news by keyword\
--   🌐 Fetch real-time news using API\
--   🖼️ Display news with images\
--   🎨 Clean and modern UI\
--   ⚡ Fast and dynamic content loading\
--   ❌ Error handling for failed API requests
+-    Search news by keyword\
+-    Fetch real-time news using API\
+-    Display news with images\
+-    Clean and modern UI\
+-    Fast and dynamic content loading\
+-    Error handling for failed API requests
 
 ------------------------------------------------------------------------
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 -   HTML\
 -   CSS\
@@ -34,7 +34,7 @@ them in a clean, modern interface.
 
 ------------------------------------------------------------------------
 
-## 📂 Project Structure
+##  Project Structure
 
 news-dashboard/
 
@@ -45,7 +45,7 @@ news-dashboard/
 
 ------------------------------------------------------------------------
 
-## 📦 Installation & Setup
+##  Installation & Setup
 
 1.  Clone the repository: git clone
     https://github.com/your-username/your-repo-name.git
@@ -56,33 +56,33 @@ news-dashboard/
 
 ------------------------------------------------------------------------
 
-## ▶️ Usage
+##  Usage
 
 -   Click Fetch News to load latest news\
 -   Enter a keyword in search bar to filter results
 
 ------------------------------------------------------------------------
 
-## 📷 Screenshots
+##  Screenshots
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](dashboard.png)
 
 ------------------------------------------------------------------------
 
-## 🔗 API Used
+##  API Used
 
 https://newsdata.io/api/1/latest
 
 ------------------------------------------------------------------------
 
-## ⚠️ Note
+##  Note
 
 API key is used for demonstration purposes. For production apps, API
 keys should be secured using a backend.
 
 ------------------------------------------------------------------------
 
-## 📚 What I Learned
+##  What I Learned
 
 -   API integration using JavaScript\
 -   Handling JSON data\
@@ -92,7 +92,7 @@ keys should be secured using a backend.
 
 ------------------------------------------------------------------------
 
-## ✨ Future Improvements
+##  Future Improvements
 
 -   Add category filters\
 -   Dark mode\
@@ -101,6 +101,6 @@ keys should be secured using a backend.
 
 ------------------------------------------------------------------------
 
-## 👩‍💻 Author
+##  Author
 
 Tanya Singh
