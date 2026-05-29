@@ -10,7 +10,7 @@ them in a clean, modern interface.
 
 ## Live Demo
 
-[👉 https://your-username.github.io]((https://news-dashboard-three-pi.vercel.app/))
+[👉 Live Demo](https://news-dashboard-three-pi.vercel.app/)
 
 ------------------------------------------------------------------------
 
