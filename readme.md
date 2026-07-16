@@ -1,112 +1,140 @@
-# Dockerized News Portal
+# Dockerized News Dashboard — Full Stack
 
-## Overview
-
-Dockerized News Portal is a responsive web application that fetches and displays real-time news articles using the NewsData.io API. The application allows users to search for news topics, view articles in a modern interface, and access the latest updates dynamically. The project is containerized using Docker for easy deployment and portability.
+A responsive news app that fetches and displays real-time articles from the
+NewsData.io API, with a full Express + MongoDB backend for user accounts and
+saved bookmarks. Started as a static frontend project and was extended with
+authentication, a database, and a secure API proxy.
 
 ---
 
 ## Live Demo
 
-🔗 https://news-dashboard-three-pi.vercel.app/
+🔗 Frontend: https://news-dashboard-three-pi.vercel.app/
+
+🔗 Backend API: https://dockerized-news-dashboard.onrender.com
+
+> Both frontend and backend are deployed and connected. Login, signup, and
+> bookmarks work directly on the live demo — no local setup required to try it out.
+>
+> Note: the backend runs on Render's free tier, which spins down after 15
+> minutes of inactivity. The first request after a period of no traffic can
+> take 30-50 seconds while it wakes back up — that's expected, not a bug.
 
 ---
 
 ## Features
 
-- Search news articles by keyword
-- Fetch real-time news using NewsData.io API
-- Display articles with images and source information
-- Responsive and modern user interface
-- Dynamic content loading using JavaScript
-- Error handling for failed API requests
-- Dockerized deployment for portability and consistency
+- Search news articles by keyword, powered by the NewsData.io API
+- User signup / login with JWT authentication
+- Passwords hashed with bcrypt — never stored in plain text
+- Per-user bookmarks: save and unsave articles, view them in a dedicated tab
+- News API key kept server-side via a backend proxy, not exposed in frontend JS
+- Responsive, modern UI with error handling for failed requests
+- Dockerized frontend (Nginx) and backend, for portable deployment
 
 ---
 
 ## Tech Stack
 
-- HTML5
-- CSS3
-- JavaScript (ES6+)
-- REST API
-- Docker
-- Nginx
-- NewsData.io API
+**Frontend:** HTML5, CSS3, JavaScript (ES6+), Fetch API
+
+**Backend:** Node.js, Express, MongoDB (Mongoose), JWT, bcrypt
+
+**Infra:** Docker, Nginx, MongoDB Atlas, Render, Vercel
+
+**External API:** NewsData.io
 
 ---
 
 ## Project Structure
 
 ```text
-dockerized-news-portal/
+news-dashboard/
 ├── index.html
 ├── style.css
 ├── script.js
-├── Dockerfile
-├── README.md
-└── screenshots/
-    └── dashboard.png
+├── Dockerfile              # frontend (nginx) container
+├── dashboard.png
+├── readme.md
+└── backend/
+    ├── server.js
+    ├── app.js
+    ├── package.json
+    ├── .env.example
+    ├── Dockerfile           # backend (node) container
+    ├── config/
+    │   └── db.js
+    ├── models/
+    │   └── User.js
+    ├── middleware/
+    │   └── authMiddleware.js
+    ├── routes/
+    │   ├── authRoutes.js
+    │   ├── bookmarkRoutes.js
+    │   └── newsRoutes.js
+    └── README.md            # backend setup & deployment details
 ```
 
 ---
 
 ## Installation & Setup
 
-### Clone the Repository
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/dockerized-news-portal.git
-
-cd dockerized-news-portal
+git clone https://github.com/your-username/news-dashboard.git
+cd news-dashboard
 ```
 
-### Run Locally
+### 2. Set up the backend
 
-Open `index.html` in your browser or use Live Server.
+```bash
+cd backend
+cp .env.example .env
+```
+
+Fill in `.env` with your own values:
+- `MONGO_URI` — connection string from a free MongoDB Atlas cluster
+- `JWT_SECRET` — any long random string
+- `NEWSDATA_API_KEY` — your NewsData.io key (a working demo key is included by default)
+
+```bash
+npm install
+npm run dev
+```
+
+Server runs at `http://localhost:5000`. Full walkthrough (Atlas cluster
+creation, IP whitelisting, deployment to Render) is in `backend/README.md`.
+
+### 3. Run the frontend
+
+Open `index.html` directly, or serve it with VS Code's Live Server. It talks
+to `http://localhost:5000/api` by default (configurable via `API_BASE` at
+the top of `script.js`).
 
 ---
 
-## Docker Setup
-
-### Build Docker Image
+## Docker Setup (frontend only)
 
 ```bash
-docker build -t dockerized-news-portal .
+docker build -t news-dashboard .
+docker run -d -p 8080:80 --name news-portal news-dashboard
 ```
 
-### Run Docker Container
+Visit `http://localhost:8080`. Stop with `docker stop news-portal`.
 
-```bash
-docker run -d -p 8080:80 --name news-portal dockerized-news-portal
-```
-
-### Access Application
-
-```text
-http://localhost:8080
-```
-
-### Stop Container
-
-```bash
-docker stop news-portal
-```
-
-### Remove Container
-
-```bash
-docker rm news-portal
-```
+The backend also ships with its own `backend/Dockerfile` for containerized
+deployment — see `backend/README.md`.
 
 ---
 
 ## Usage
 
-1. Enter a keyword in the search box.
-2. Click **Fetch News**.
-3. Browse the latest news articles.
-4. Open articles using the **Read More** button.
+1. Sign up or log in (top right).
+2. Enter a keyword and click **Fetch News**.
+3. Click **☆ Save** on any article to bookmark it.
+4. Switch to the **My Bookmarks** tab to view everything you've saved.
+5. Open articles directly with **Read More**.
 
 ---
 
@@ -116,83 +144,70 @@ docker rm news-portal
 
 ---
 
-## API Used
+## API Endpoints (backend)
 
-### NewsData.io API
-
-```text
-https://newsdata.io/api/1/latest
-```
-
-Sample Request:
-
-```javascript
-https://newsdata.io/api/1/latest?apikey=YOUR_API_KEY&q=india&language=en
-```
+| Method | Route                 | Auth? | Description                     |
+|--------|------------------------|-------|----------------------------------|
+| POST   | `/api/auth/signup`     | No    | Create an account                |
+| POST   | `/api/auth/login`      | No    | Log in, returns a JWT            |
+| GET    | `/api/auth/me`         | Yes   | Get the logged-in user's profile |
+| GET    | `/api/bookmarks`       | Yes   | List saved articles              |
+| POST   | `/api/bookmarks`       | Yes   | Save an article                  |
+| DELETE | `/api/bookmarks/:id`   | Yes   | Remove a saved article           |
+| GET    | `/api/news?q=keyword`  | No    | Proxies NewsData.io              |
+| GET    | `/api/health`          | No    | Health check                     |
 
 ---
 
 ## Challenges Solved
 
-- API integration using Fetch API
-- Asynchronous programming with async/await
-- Handling empty API responses
-- Managing missing article images
-- Error handling and debugging
-- Containerizing a frontend application using Docker
+- Moving a hardcoded, client-exposed API key to a secure backend proxy
+- Designing a JWT-based auth flow with protected routes and token expiry
+- Modeling per-user bookmarks in MongoDB and preventing duplicate saves
+- Handling CORS between a separately-hosted frontend and backend
+- Deploying frontend and backend to separate platforms (Vercel + Render)
+  and correctly configuring cross-origin requests between them
+- Async/await API integration, empty-response handling, and error states
+- Containerizing both a static frontend and a Node backend independently
 
 ---
 
 ## What I Learned
 
-- Working with REST APIs
-- Processing JSON responses
-- DOM manipulation using JavaScript
-- Building responsive user interfaces
-- Docker image creation and container management
-- Deploying web applications efficiently
-- Debugging API and CORS-related issues
+- Building a REST API with Express, including auth middleware and rate limiting
+- Password security with bcrypt and stateless auth with JWT
+- Schema design in MongoDB/Mongoose, including embedded subdocuments
+- Connecting a frontend to a self-hosted backend instead of calling a third-party API directly
+- Docker image creation for both static and Node.js services
+- Debugging real-world CORS and environment-variable configuration issues
+- Deploying a multi-service app across two different hosting platforms
 
 ---
-
-## Backend (New)
-
-This project now has a full Express + MongoDB backend in `/backend` that adds:
-
-- Signup / login with JWT authentication and bcrypt-hashed passwords
-- Per-user bookmarks (save/unsave news articles)
-- A `/api/news` proxy so the NewsData.io API key lives server-side, not in frontend JS
-
-See `backend/README.md` for setup and deployment instructions (MongoDB Atlas + Render/Railway).
-
-Quick start:
-
-```bash
-cd backend
-cp .env.example .env   # fill in MONGO_URI and JWT_SECRET
-npm install
-npm run dev
-```
-
-Then open `index.html` (e.g. via Live Server) — it talks to `http://localhost:5000/api` by default.
 
 ## Future Enhancements
 
 - Category-based news filtering
 - Dark mode support
 - Pagination and infinite scrolling
-- Bookmark favorite articles
+- Email verification and password reset flow
+- Refresh tokens / httpOnly cookie-based auth (more XSS-resistant than localStorage)
 - Multi-language support
-- Backend integration for secure API key storage
-- User authentication and personalization
 
 ---
 
 ## Resume Impact
 
-- Developed a real-time news portal using JavaScript and REST APIs to fetch and display dynamic news content.
-- Containerized the application using Docker and Nginx, enabling portable deployment and consistent execution across environments.
-- Implemented responsive UI design, API integration, and error handling to improve user experience.
+- Built a full-stack news application with JWT authentication, bcrypt password
+  hashing, and MongoDB-backed user data, extending an existing frontend into a
+  complete client-server system.
+- Designed and implemented a REST API (Express/Node.js) with protected routes,
+  rate limiting, and a secure server-side proxy to eliminate client-exposed API keys.
+- Modeled per-user relational data (bookmarks) in MongoDB using embedded documents,
+  and implemented full CRUD operations.
+- Deployed a multi-service application across separate platforms (Vercel for
+  frontend, Render for backend, MongoDB Atlas for the database).
+- Containerized both frontend (Nginx) and backend (Node.js) services with Docker
+  for portable, consistent deployment.
 
 ---
 
