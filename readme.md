@@ -1,4 +1,4 @@
-# News Dashboard — Full Stack
+# Dockerized News Dashboard — Full Stack
 
 A responsive news app that fetches and displays real-time articles from the
 NewsData.io API, with a full Express + MongoDB backend for user accounts and
