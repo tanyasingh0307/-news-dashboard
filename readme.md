@@ -1,4 +1,4 @@
-# Dockerized News Dashboard — Full Stack
+# News Dashboard — Full Stack
 
 A responsive news app that fetches and displays real-time articles from the
 NewsData.io API, with a full Express + MongoDB backend for user accounts and
@@ -9,7 +9,16 @@ authentication, a database, and a secure API proxy.
 
 ## Live Demo
 
-🔗 Demo: https://news-dashboard-three-pi.vercel.app/
+🔗 Frontend: https://news-dashboard-three-pi.vercel.app/
+
+🔗 Backend API: https://dockerized-news-dashboard.onrender.com
+
+> Both frontend and backend are deployed and connected. Login, signup, and
+> bookmarks work directly on the live demo — no local setup required to try it out.
+>
+> Note: the backend runs on Render's free tier, which spins down after 15
+> minutes of inactivity. The first request after a period of no traffic can
+> take 30-50 seconds while it wakes back up — that's expected, not a bug.
 
 ---
 
@@ -31,7 +40,7 @@ authentication, a database, and a secure API proxy.
 
 **Backend:** Node.js, Express, MongoDB (Mongoose), JWT, bcrypt
 
-**Infra:** Docker, Nginx, MongoDB Atlas
+**Infra:** Docker, Nginx, MongoDB Atlas, Render, Vercel
 
 **External API:** NewsData.io
 
@@ -49,6 +58,7 @@ news-dashboard/
 ├── readme.md
 └── backend/
     ├── server.js
+    ├── app.js
     ├── package.json
     ├── .env.example
     ├── Dockerfile           # backend (node) container
@@ -145,6 +155,7 @@ deployment — see `backend/README.md`.
 | POST   | `/api/bookmarks`       | Yes   | Save an article                  |
 | DELETE | `/api/bookmarks/:id`   | Yes   | Remove a saved article           |
 | GET    | `/api/news?q=keyword`  | No    | Proxies NewsData.io              |
+| GET    | `/api/health`          | No    | Health check                     |
 
 ---
 
@@ -154,6 +165,8 @@ deployment — see `backend/README.md`.
 - Designing a JWT-based auth flow with protected routes and token expiry
 - Modeling per-user bookmarks in MongoDB and preventing duplicate saves
 - Handling CORS between a separately-hosted frontend and backend
+- Deploying frontend and backend to separate platforms (Vercel + Render)
+  and correctly configuring cross-origin requests between them
 - Async/await API integration, empty-response handling, and error states
 - Containerizing both a static frontend and a Node backend independently
 
@@ -167,6 +180,7 @@ deployment — see `backend/README.md`.
 - Connecting a frontend to a self-hosted backend instead of calling a third-party API directly
 - Docker image creation for both static and Node.js services
 - Debugging real-world CORS and environment-variable configuration issues
+- Deploying a multi-service app across two different hosting platforms
 
 ---
 
@@ -190,6 +204,8 @@ deployment — see `backend/README.md`.
   rate limiting, and a secure server-side proxy to eliminate client-exposed API keys.
 - Modeled per-user relational data (bookmarks) in MongoDB using embedded documents,
   and implemented full CRUD operations.
+- Deployed a multi-service application across separate platforms (Vercel for
+  frontend, Render for backend, MongoDB Atlas for the database).
 - Containerized both frontend (Nginx) and backend (Node.js) services with Docker
   for portable, consistent deployment.
 
