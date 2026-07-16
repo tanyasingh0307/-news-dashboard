@@ -1,6 +1,6 @@
 // Change this to your deployed backend URL once it's live on Render/Railway,
 // e.g. "https://news-dashboard-backend.onrender.com/api"
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://dockerized-news-dashboard.onrender.com/api";
 
 let currentUser = null;      // { id, name, email } once logged in
 let authToken = localStorage.getItem("token") || null;
